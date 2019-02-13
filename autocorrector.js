@@ -62,7 +62,7 @@ var Rules = {
 
       [/(\d+)(| )(%) /g, "$1"+"\u00a0"+"$3 "],
 
-      [/(|m|c|d|k)m(\d) /g, "$1m<sup>$2</sup> "],
+      [/(|m|c|d|k)m(\d) /g, "$1m<sup>$2</sup> "]
 
     ],
 
@@ -112,7 +112,7 @@ var Rules = {
 
     shorts: [
 
-      [/ (v|V)iz\./g, " $1iz"],
+      [/ (v|V)iz\./g, " $1iz"]
 
     ]
 
@@ -120,7 +120,6 @@ var Rules = {
 
 var all = document.getElementsByTagName("*");
 var ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE"];
-
 
 for (var i=0, max=all.length; i < max; i++)
 {
@@ -133,10 +132,9 @@ for (var i=0, max=all.length; i < max; i++)
 	}
 	if (ignoredElemenents.includes(all[i].tagName) || element.textContent.trim() === ""|| element.tagName === "HEAD" ){continue;}
 	element.textContent = improveTypography(element.textContent);
-	//console.log(element.textContent);
-
 
 }
+
 function improveTypography(string){
 
   if(typeof string !== 'string')
@@ -145,7 +143,51 @@ function improveTypography(string){
 
 
 
-  for(let rule of Rules.quote){
+  for(let rule of Rules.quote)
+  {
+
+	string = string.replace(rule[0], rule[1]);
+
+  }
+
+  for(let rule of Rules.dash)
+  {
+
+    string = string.replace(rule[0], rule[1]);
+
+  }
+
+  for(let rule of Rules.units)
+  {
+
+    string = string.replace(rule[0], rule[1]);
+
+  }
+
+  for(let rule of Rules.number)
+  {
+
+    string = string.replace(rule[0], rule[1]);
+
+  }
+
+  for(let rule of Rules.space)
+  {
+
+    string = string.replace(rule[0], rule[1]);
+
+  }
+
+  for(let rule of Rules.date)
+  {
+
+    string = string.replace(rule[0], rule[1]);
+
+  }
+
+
+  for(let rule of Rules.elipse)
+  {
 
     string = string.replace(rule[0], rule[1]);
 
@@ -153,59 +195,12 @@ function improveTypography(string){
 
 
 
-  for(let rule of Rules.dash){
+  for(let rule of Rules.shorts)
+  {
 
     string = string.replace(rule[0], rule[1]);
 
   }
-
-
-
-  for(let rule of Rules.units){
-
-    string = string.replace(rule[0], rule[1]);
-
-  }
-
-
-
-  for(let rule of Rules.number){
-
-    string = string.replace(rule[0], rule[1]);
-
-  }
-
-
-
-  for(let rule of Rules.space){
-
-    string = string.replace(rule[0], rule[1]);
-
-  }
-
-
-
-  for(let rule of Rules.date){
-
-    string = string.replace(rule[0], rule[1]);
-
-  }
-
-
-  for(let rule of Rules.elipse){
-
-    string = string.replace(rule[0], rule[1]);
-
-  }
-
-
-
-  for(let rule of Rules.shorts){
-
-    string = string.replace(rule[0], rule[1]);
-
-  }
-
 
   return string;
 
