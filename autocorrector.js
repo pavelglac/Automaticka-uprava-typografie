@@ -119,11 +119,11 @@ var Rules = {
 };
 
 var all = document.getElementsByTagName("*");
-var ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE"];
+var ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME"];
 
 for (var i=0, max=all.length; i < max; i++)
 {
-	element =  all[i]
+	element =  all[i];
 	if (element.hasChildNodes())
 	{
 
@@ -131,7 +131,9 @@ for (var i=0, max=all.length; i < max; i++)
 
 	}
 	if (ignoredElemenents.includes(all[i].tagName) || element.textContent.trim() === ""|| element.tagName === "HEAD" ){continue;}
-	element.textContent = improveTypography(element.textContent);
+	// element.textContent = improveTypography(element.textContent);
+	// element.textContent = "ahoj";
+	// console.log( all[i].tagName + element.textContent);
 
 }
 
