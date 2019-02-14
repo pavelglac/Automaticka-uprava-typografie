@@ -119,7 +119,7 @@ var Rules = {
 };
 
 var all = document.getElementsByTagName("*");
-var ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME"];
+var ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", ""];
 
 for (var i=0, max=all.length; i < max; i++)
 {
