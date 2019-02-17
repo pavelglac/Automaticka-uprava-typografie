@@ -118,9 +118,9 @@ var Rules = {
 
 };
 
-var all = document.getElementsByTagName("*");
-var inLineElements = ["A", "SPAN", "STRONG"];
-var ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", ""];
+const all = document.getElementsByTagName("*");
+const inLineElements = ["A", "SPAN", "STRONG"];
+const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", ""];
 
 for (var i=0, max=all.length; i < max; i++)
 {
@@ -128,14 +128,14 @@ for (var i=0, max=all.length; i < max; i++)
 	if (element.hasChildNodes())
 	{
 
-		element =  all[i].childNodes[0]
+		element =  all[i].childNodes[0];
 
 	}
-	if (ignoredElemenents.includes(all[i].tagName) || element.textContent.trim() === ""|| element.tagName === "HEAD"){continue;}
-	// findInLineElemets(all[i]);
+  if (ignoredElemenents.includes(all[i].tagName) ||  element.nodeValue === null|| element.textContent.trim() === ""|| element.tagName === "HEAD"){continue;}
+	//findInLineElemets(all[i]);
 	// element.textContent = improveTypography(element.textContent);
-	element.textContent = "ahoj";
-	// console.log( all[i].tagName + element.textContent);
+	 element.textContent = "ahoj";
+	//console.log( element.tagName + element.textContent);
 
 }
 
@@ -144,7 +144,7 @@ function findInLineElemets(node)
 	if (node.hasChildNodes())
 	{
 		var childCount = node.childElementCount;
-		var max = childCount*2 + 1;
+		const max = childCount*2 + 1;
 
 		for (var i = 1; i < max; i++)
 		{
@@ -152,7 +152,6 @@ function findInLineElemets(node)
 			{
 
 				node.childNodes[i-1].textContent = "ahoj";
-				node.childNodes[i].textContent = "ahoj";
 				node.childNodes[i+1].textContent = "ahoj";
 
 			}
@@ -162,12 +161,6 @@ function findInLineElemets(node)
 
 
 function improveTypography(string){
-
-  if(typeof string !== 'string')
-
-    throw ("The parametr must be a string");
-
-
 
   for(let rule of Rules.quote)
   {
