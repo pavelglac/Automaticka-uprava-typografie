@@ -1,4 +1,7 @@
-var Rules = {
+const all = document.getElementsByTagName("*");
+const inLineElements = ["A", "SPAN", "STRONG",];
+const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", ""];
+const Rules = {
 
     // rules for czech quotes
 
@@ -14,13 +17,6 @@ var Rules = {
 
     ],
 
-    // rule for dash instead of minus
-
-    dash: [
-
-      [/ - /g, " – "]
-
-    ],
 
     // rules for units
 
@@ -108,21 +104,10 @@ var Rules = {
 
     ],
 
-    // rule for removing dot after a specific abbrs
-
-    shorts: [
-
-      [/ (v|V)iz\./g, " $1iz"]
-
-    ]
 
 };
 
-const all = document.getElementsByTagName("*");
-const inLineElements = ["A", "SPAN", "STRONG"];
-const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", ""];
-
-for (var i=0, max=all.length; i < max; i++)
+for (let i=0, max=all.length; i < max; i++)
 {
 	element =  all[i];
 	if (element.hasChildNodes())
@@ -131,48 +116,40 @@ for (var i=0, max=all.length; i < max; i++)
 		element =  all[i].childNodes[0];
 
 	}
-  if (ignoredElemenents.includes(all[i].tagName) ||  element.nodeValue === null|| element.textContent.trim() === ""|| element.tagName === "HEAD"){continue;}
-	//findInLineElemets(all[i]);
-	// element.textContent = improveTypography(element.textContent);
-	 element.textContent = "ahoj";
-	//console.log( element.tagName + element.textContent);
+	if (
+		ignoredElemenents.includes(all[i].tagName)
+		|| element.nodeValue === null
+		|| element.textContent.trim() === ""
+		|| element.tagName === "HEAD"
+		){continue;}
+	findInLineElemets(all[i]);
+	setImprovedTypografy(element);
 
 }
+
 
 function findInLineElemets(node)
 {
-	if (node.hasChildNodes())
-	{
-		var childCount = node.childElementCount;
-		const max = childCount*2 + 1;
+	if (!node.hasChildNodes() || !inLineElements.includes(node.tagName) || node.nextSibling === null){return;}
+	setImprovedTypografy(node.nextSibling);
+	return;
 
-		for (var i = 1; i < max; i++)
-		{
-			if (inLineElements.includes(node.childNodes[i].tagName))
-			{
-
-				node.childNodes[i-1].textContent = "ahoj";
-				node.childNodes[i+1].textContent = "ahoj";
-
-			}
-		}
-	}
 }
 
+function setImprovedTypografy(element)
+{
+	element.textContent = improveTypography(element.textContent);
+	// element.textContent = "ahoj";
+	return;
+}
 
 function improveTypography(string){
+
 
   for(let rule of Rules.quote)
   {
 
 	string = string.replace(rule[0], rule[1]);
-
-  }
-
-  for(let rule of Rules.dash)
-  {
-
-    string = string.replace(rule[0], rule[1]);
 
   }
 
@@ -206,15 +183,6 @@ function improveTypography(string){
 
 
   for(let rule of Rules.elipse)
-  {
-
-    string = string.replace(rule[0], rule[1]);
-
-  }
-
-
-
-  for(let rule of Rules.shorts)
   {
 
     string = string.replace(rule[0], rule[1]);
