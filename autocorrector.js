@@ -1,6 +1,6 @@
 const all = document.getElementsByTagName("*");
 const inLineElements = ["A", "SPAN", "STRONG", "H1", "H2"];
-const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "BODY", ""];
+const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "BODY", "HEAD", "META", "HTML", ""];
 const usellesChar = "\u035B";
 const Rules = {
 
@@ -111,21 +111,26 @@ const Rules = {
 for (let i=0, max=all.length; i < max; i++)
 {
 	element =  all[i];
-	if (element.hasChildNodes())
-	{
-
-		element =  all[i].childNodes[0];
-
-	}
-	if (
-		ignoredElemenents.includes(all[i].tagName)
-		|| element.nodeValue === null
-		|| element.textContent.trim() === ""
-		|| element.tagName === "HEAD"
-		){continue;}
+	if (shouldSkip(element)){continue;}
   // setImprovedTypografy(element);
 console.log("Teď běží " + all[i].tagName)
 	main(all[i]);
+
+}
+
+function shouldSkip(node)
+{
+
+  if (ignoredElemenents.includes(node.tagName)) {return true;}
+  let sibs = getSiblings(node.childNodes[0]);
+
+  for (let i=0, max=sibs.length;   i < max; i++)
+  {
+
+    if (sibs[i].nodeType === 3 && sibs[i].nodeValue !== null && sibs[i].textContent.trim() !== "") {return false;}
+  }
+
+  return true;
 
 }
 
@@ -133,29 +138,37 @@ function main(element)
 {
 
   let sibs = getSiblings(element);
+  if (element.tagName === "DIV")
+  {
+    let sibs = getSiblings(element.childNodes[0]);
+    for (let i=0, max=sibs.length;   i < max; i++)
+    {
+    //   // if (sibs[i].nodeType === 3)
+    //   // {
+
+    //   //   if (sibs[i].nextSibling === null){setImprovedTypografy(sibs[i]);return;}
+    //     // if (sibs[i].nextSibling.nodeType === 3){setImprovedTypografy(sibs[i]);return;}
+    if (sibs[i].nodeType === 3) {setImprovedTypografy(element.childNodes[i]);}
+        // textJoining(sibs[i]);
+    //     // let textOfFirtstElement = sibs[i].textContent;
+
+
+    //     // setImprovedTypografy(sibs[i]);
+    //     // console.log(sibs[i].tagName);
+
+    //   // }
+
+    }
+  }
   textJoining(element);
-
-  // for (let i=0, max=sibs.length; (i < max || i = 1); i++)
-  // {
-  //   // if (sibs[i].nodeType === 3)
-  //   // {
-
-  //   //   if (sibs[i].nextSibling === null){setImprovedTypografy(sibs[i]);return;}
-  //     // if (sibs[i].nextSibling.nodeType === 3){setImprovedTypografy(sibs[i]);return;}
-  //     textJoining(sibs[i]);
-  //     // let textOfFirtstElement = sibs[i].textContent;
-
-
-  //     // setImprovedTypografy(sibs[i]);
-  //     // console.log(sibs[i].tagName);
-
-  //   // }
-
-  // }
 
 
 }
- // var neco = document.getElementById("neco4");
+//  var neco = document.getElementById("neco");
+//  // if (neco.hasChildNodes) {console.log("Má")}
+//  // var neco2 = neco.nextSibling;
+// console.log(neco.childNodes[4].textContent.trim());
+
  // console.log(neco4.nodeType);
  // if (neco.hasChildNodes) { console.log("má dítě");}
 // getAllSiblings(neco);
@@ -181,13 +194,12 @@ function getSiblings(element)
 
   let firstElement = getElementWithText(node);
 
-  if (node.nextSibling === null || getElementWithText(node.nextSibling) === null){console.log("Soused elementu " + node.tagName + " je null");setImprovedTypografy(firstElement); return;}
-  let nextElement = getElementWithText(node.nextSibling);
+  if (node.nextSibling === null || getElementWithText(node.nextSibling) === null || firstElement.nextSibling === null){console.log("Soused elementu " + node.tagName + " je null");setImprovedTypografy(firstElement); return;}
+  let nextElement = getElementWithText(firstElement.nextSibling);
 
   let text =  firstElement.textContent.concat(usellesChar);
   text = text.concat(nextElement.textContent);
 
-  console.log(firstElement.textContent);
   console.log(text);
 
   text = improveTypography(text);
@@ -231,6 +243,7 @@ function getSiblings(element)
       }
   
     }
+
     return null;
  
  }
