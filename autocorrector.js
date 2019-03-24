@@ -1,6 +1,7 @@
 const all = document.getElementsByTagName("*");
-const inLineElements = ["A", "SPAN", "STRONG",];
-const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", ""];
+const inLineElements = ["A", "SPAN", "STRONG", "H1", "H2"];
+const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "BODY", ""];
+const usellesChar = "\u035B";
 const Rules = {
 
     // rules for czech quotes
@@ -122,11 +123,117 @@ for (let i=0, max=all.length; i < max; i++)
 		|| element.textContent.trim() === ""
 		|| element.tagName === "HEAD"
 		){continue;}
-	findInLineElemets(all[i]);
-	setImprovedTypografy(element);
+  // setImprovedTypografy(element);
+console.log("Teď běží " + all[i].tagName)
+	main(all[i]);
 
 }
 
+function main(element)
+{
+
+  let sibs = getSiblings(element);
+  textJoining(element);
+
+  // for (let i=0, max=sibs.length; (i < max || i = 1); i++)
+  // {
+  //   // if (sibs[i].nodeType === 3)
+  //   // {
+
+  //   //   if (sibs[i].nextSibling === null){setImprovedTypografy(sibs[i]);return;}
+  //     // if (sibs[i].nextSibling.nodeType === 3){setImprovedTypografy(sibs[i]);return;}
+  //     textJoining(sibs[i]);
+  //     // let textOfFirtstElement = sibs[i].textContent;
+
+
+  //     // setImprovedTypografy(sibs[i]);
+  //     // console.log(sibs[i].tagName);
+
+  //   // }
+
+  // }
+
+
+}
+ // var neco = document.getElementById("neco4");
+ // console.log(neco4.nodeType);
+ // if (neco.hasChildNodes) { console.log("má dítě");}
+// getAllSiblings(neco);
+
+function getSiblings(element)
+{
+
+  var sibs = [];
+  sibs.push(element);
+  while (element = element.nextSibling)
+  {
+
+      sibs.push(element);
+
+  } 
+  return sibs;
+
+}
+ function textJoining(node)
+ {
+
+  if (getElementWithText(node) === null) {console.log("Poslaný element " + node.tagName + " je null");return;}
+
+  let firstElement = getElementWithText(node);
+
+  if (node.nextSibling === null || getElementWithText(node.nextSibling) === null){console.log("Soused elementu " + node.tagName + " je null");setImprovedTypografy(firstElement); return;}
+  let nextElement = getElementWithText(node.nextSibling);
+
+  let text =  firstElement.textContent.concat(usellesChar);
+  text = text.concat(nextElement.textContent);
+
+  console.log(firstElement.textContent);
+  console.log(text);
+
+  text = improveTypography(text);
+  const textField = text.split("\u035B", 2);
+
+  firstElement.textContent = textField[0];
+  nextElement.textContent = textField[1];
+
+  console.log("Script se vykonal celý");
+
+  return;
+
+ }
+
+ function getElementWithText(node)
+ {
+
+  if (node.nodeType === 3){const element = node; return element}
+  if (node.nodeType === 1){const element = getText(node); return element}
+
+  return null;
+
+ }
+
+ function getText(node)
+ {
+
+    let sibs = getSiblings(node);
+
+    for (let i=0, maxi=sibs.length; i < maxi; i++)
+    {
+      if (sibs[i].nodeType === 3){return sibs[i];}
+      if (sibs[i].hasChildNodes)
+      { 
+
+        for (let x=0, max=sibs[i].childElementCount; x <= max; x++)
+        {
+          if (sibs[i].childNodes[x].nodeType === 3){return sibs[i].childNodes[x];}
+        }
+
+      }
+  
+    }
+    return null;
+ 
+ }
 
 function findInLineElemets(node)
 {
@@ -146,19 +253,19 @@ function setImprovedTypografy(element)
 function improveTypography(string){
 
 
-  for(let rule of Rules.quote)
-  {
+ //  for(let rule of Rules.quote)
+ //  {
 
-	string = string.replace(rule[0], rule[1]);
+	// string = string.replace(rule[0], rule[1]);
 
-  }
+ //  }
 
-  for(let rule of Rules.units)
-  {
+ //  for(let rule of Rules.units)
+ //  {
 
-    string = string.replace(rule[0], rule[1]);
+ //    string = string.replace(rule[0], rule[1]);
 
-  }
+ //  }
 
   for(let rule of Rules.number)
   {
@@ -167,27 +274,27 @@ function improveTypography(string){
 
   }
 
-  for(let rule of Rules.space)
-  {
+  // for(let rule of Rules.space)
+  // {
 
-    string = string.replace(rule[0], rule[1]);
+  //   string = string.replace(rule[0], rule[1]);
 
-  }
+  // }
 
-  for(let rule of Rules.date)
-  {
+  // for(let rule of Rules.date)
+  // {
 
-    string = string.replace(rule[0], rule[1]);
+  //   string = string.replace(rule[0], rule[1]);
 
-  }
+  // }
 
 
-  for(let rule of Rules.elipse)
-  {
+  // for(let rule of Rules.elipse)
+  // {
 
-    string = string.replace(rule[0], rule[1]);
+  //   string = string.replace(rule[0], rule[1]);
 
-  }
+  // }
 
   return string;
 
