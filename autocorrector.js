@@ -1,5 +1,5 @@
 const all = document.getElementsByTagName("*");
-const inLineElements = ["A", "SPAN", "STRONG", "H1", "H2"];
+const inLineElements = ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "CODE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "BR", "IMG", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"];
 const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "BODY", "HEAD", "META", "HTML", ""];
 const usellesChar = "\u035B";
 const Rules = {
@@ -121,7 +121,7 @@ console.log("Teď běží " + all[i].tagName)
 function shouldSkip(node)
 {
 
-  if (ignoredElemenents.includes(node.tagName)) {return true;}
+  if (ignoredElemenents.includes(node.tagName) || node.textContent === "") {return true;}
   let sibs = getSiblings(node.childNodes[0]);
 
   for (let i=0, max=sibs.length;   i < max; i++)
@@ -138,17 +138,16 @@ function main(element)
 {
 
   let sibs = getSiblings(element);
-  if (element.tagName === "DIV")
-  {
-    let sibs = getSiblings(element.childNodes[0]);
-    for (let i=0, max=sibs.length;   i < max; i++)
+
+    let childs = getSiblings(element.childNodes[0]);
+    for (let i=0, max=childs.length;   i < max; i++)
     {
     //   // if (sibs[i].nodeType === 3)
     //   // {
 
     //   //   if (sibs[i].nextSibling === null){setImprovedTypografy(sibs[i]);return;}
     //     // if (sibs[i].nextSibling.nodeType === 3){setImprovedTypografy(sibs[i]);return;}
-    if (sibs[i].nodeType === 3) {setImprovedTypografy(element.childNodes[i]);}
+    if (childs[i].nodeType === 3) {setImprovedTypografy(element.childNodes[i]);}
         // textJoining(sibs[i]);
     //     // let textOfFirtstElement = sibs[i].textContent;
 
@@ -159,14 +158,17 @@ function main(element)
     //   // }
 
     }
-  }
+
   textJoining(element);
 
 
 }
 //  var neco = document.getElementById("neco");
-//  // if (neco.hasChildNodes) {console.log("Má")}
-//  // var neco2 = neco.nextSibling;
+
+// console.log(neco.nodeValue);
+
+//  if (neco.hasChildNodes) {console.log("Má")}
+//  var neco2 = neco.nextSibling;
 // console.log(neco.childNodes[4].textContent.trim());
 
  // console.log(neco4.nodeType);
@@ -176,7 +178,7 @@ function main(element)
 function getSiblings(element)
 {
 
-  var sibs = [];
+  let sibs = [];
   sibs.push(element);
   while (element = element.nextSibling)
   {
@@ -192,21 +194,41 @@ function getSiblings(element)
 
   if (getElementWithText(node) === null) {console.log("Poslaný element " + node.tagName + " je null");return;}
 
-  let firstElement = getElementWithText(node);
+  if (!node.hasChildNodes || node.childNodes[0].nextSibling === null ){console.log("Soused elementu " + node.tagName + " je null");setImprovedTypografy(node); return;}
 
-  if (node.nextSibling === null || getElementWithText(node.nextSibling) === null || firstElement.nextSibling === null){console.log("Soused elementu " + node.tagName + " je null");setImprovedTypografy(firstElement); return;}
-  let nextElement = getElementWithText(firstElement.nextSibling);
+  const elements = getElementWithText(node);
+  let text = "";
 
-  let text =  firstElement.textContent.concat(usellesChar);
-  text = text.concat(nextElement.textContent);
+  for (let i = 0; i < elements.length; i++) {
 
-  console.log(text);
+    text = text.concat(elements[i].textContent);
+    text = text.concat(usellesChar);
+
+  }
 
   text = improveTypography(text);
-  const textField = text.split("\u035B", 2);
+  const textField = text.split(usellesChar, elements.length);
+  console.log(text);
 
-  firstElement.textContent = textField[0];
-  nextElement.textContent = textField[1];
+  for (let i = 0; i < textField.length; i++) {
+
+    elements[i].textContent = textField[i];
+
+  }
+
+
+  // let nextElement = getElementWithText(firstElement.nextSibling);
+
+  // let text =  firstElement.textContent.concat(usellesChar);
+  // text = text.concat(nextElement.textContent);
+
+  // console.log(text);
+
+  // text = improveTypography(text);
+  // const textField = text.split("\u035B", 2);
+
+  // firstElement.textContent = textField[0];
+  // nextElement.textContent = textField[1];
 
   console.log("Script se vykonal celý");
 
@@ -227,24 +249,25 @@ function getSiblings(element)
  function getText(node)
  {
 
-    let sibs = getSiblings(node);
+    const sibs = getSiblings(node.childNodes[0]);
+    let sibsWithText = [];
 
     for (let i=0, maxi=sibs.length; i < maxi; i++)
     {
-      if (sibs[i].nodeType === 3){return sibs[i];}
-      if (sibs[i].hasChildNodes)
+      if (sibs[i].nodeType === 3){sibsWithText.push(sibs[i]);}
+      if (sibs[i].hasChildNodes && inLineElements.includes(sibs[i].tagName))
       { 
 
         for (let x=0, max=sibs[i].childElementCount; x <= max; x++)
         {
-          if (sibs[i].childNodes[x].nodeType === 3){return sibs[i].childNodes[x];}
+          if (sibs[i].childNodes[x].nodeType === 3){sibsWithText.push(sibs[i]);}
         }
 
       }
   
     }
 
-    return null;
+    return sibsWithText;
  
  }
 
