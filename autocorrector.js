@@ -67,7 +67,8 @@ const Rules = {
 
     number: [
 
-      [/(\d)(?=(\d{3})+(?!\d))/g, "$1 "]
+      [/(\d|\u035B)(?=(\d{3}|\d{3}\u035Br|\d\u035B\d{2}|\d{2}\u035B\d|\u035B\d{3})+(?!(\d|\u035B\d|\d\u035B)))/g, "$1 "]
+
 
     ],
 
@@ -101,7 +102,10 @@ const Rules = {
 
     elipse: [
 
-      [/\.{3}/g, "…"]
+      [/\.{3}/g, "…"],
+      [/\.{2}\u035B\./g, "…\u035B"],
+      [/\.\u035B\.\./g, "\u035B…"],
+      [/\.\u035B\.\u035B\./g, "\u035B…\u035B"]
 
     ],
 
@@ -121,7 +125,7 @@ console.log("Teď běží " + all[i].tagName)
 function shouldSkip(node)
 {
 
-  if (ignoredElemenents.includes(node.tagName) || node.textContent === "") {return true;}
+  if (ignoredElemenents.includes(node.tagName) || node.textContent === "" || inLineElements.includes(node.tagName)) {return true;}
   let sibs = getSiblings(node.childNodes[0]);
 
   for (let i=0, max=sibs.length;   i < max; i++)
@@ -139,33 +143,14 @@ function main(element)
 
   let sibs = getSiblings(element);
 
-    let childs = getSiblings(element.childNodes[0]);
-    for (let i=0, max=childs.length;   i < max; i++)
-    {
-    //   // if (sibs[i].nodeType === 3)
-    //   // {
-
-    //   //   if (sibs[i].nextSibling === null){setImprovedTypografy(sibs[i]);return;}
-    //     // if (sibs[i].nextSibling.nodeType === 3){setImprovedTypografy(sibs[i]);return;}
-    if (childs[i].nodeType === 3) {setImprovedTypografy(element.childNodes[i]);}
-        // textJoining(sibs[i]);
-    //     // let textOfFirtstElement = sibs[i].textContent;
-
-
-    //     // setImprovedTypografy(sibs[i]);
-    //     // console.log(sibs[i].tagName);
-
-    //   // }
-
-    }
 
   textJoining(element);
 
 
 }
-//  var neco = document.getElementById("neco");
+ // var neco = document.getElementById("2");
 
-// console.log(neco.nodeValue);
+ // console.log(neco.nodeValue);
 
 //  if (neco.hasChildNodes) {console.log("Má")}
 //  var neco2 = neco.nextSibling;
@@ -180,6 +165,7 @@ function getSiblings(element)
 
   let sibs = [];
   sibs.push(element);
+  if (element.nextSibling === null) {return sibs;}
   while (element = element.nextSibling)
   {
 
@@ -217,21 +203,6 @@ function getSiblings(element)
   }
 
 
-  // let nextElement = getElementWithText(firstElement.nextSibling);
-
-  // let text =  firstElement.textContent.concat(usellesChar);
-  // text = text.concat(nextElement.textContent);
-
-  // console.log(text);
-
-  // text = improveTypography(text);
-  // const textField = text.split("\u035B", 2);
-
-  // firstElement.textContent = textField[0];
-  // nextElement.textContent = textField[1];
-
-  console.log("Script se vykonal celý");
-
   return;
 
  }
@@ -254,14 +225,17 @@ function getSiblings(element)
 
     for (let i=0, maxi=sibs.length; i < maxi; i++)
     {
-      if (sibs[i].nodeType === 3){sibsWithText.push(sibs[i]);}
-      if (sibs[i].hasChildNodes && inLineElements.includes(sibs[i].tagName))
+      console.log(i);
+      if (sibs[i].nodeValue !== null && sibs[i].nodeType === 3){console.log(sibs[i].textContent);sibsWithText.push(sibs[i]);}
+      if (sibs[i].hasChildNodes && inLineElements.includes(sibs[i].tagName) && sibs[i].nodeType === 1)
       { 
 
-        for (let x=0, max=sibs[i].childElementCount; x <= max; x++)
+        const sibsOfTheChild = getText(sibs[i]);
+        for (let x=0, max=sibsOfTheChild.length; x < max; x++)
         {
-          if (sibs[i].childNodes[x].nodeType === 3){sibsWithText.push(sibs[i]);}
+          sibsWithText.push(sibsOfTheChild[x]);
         }
+
 
       }
   
@@ -271,13 +245,6 @@ function getSiblings(element)
  
  }
 
-function findInLineElemets(node)
-{
-	if (!node.hasChildNodes() || !inLineElements.includes(node.tagName) || node.nextSibling === null){return;}
-	setImprovedTypografy(node.nextSibling);
-	return;
-
-}
 
 function setImprovedTypografy(element)
 {
@@ -325,12 +292,12 @@ function improveTypography(string){
   // }
 
 
-  // for(let rule of Rules.elipse)
-  // {
+  for(let rule of Rules.elipse)
+  {
 
-  //   string = string.replace(rule[0], rule[1]);
+    string = string.replace(rule[0], rule[1]);
 
-  // }
+  }
 
   return string;
 
