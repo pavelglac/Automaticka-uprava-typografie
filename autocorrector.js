@@ -67,7 +67,7 @@ const Rules = {
 
     number: [
 
-      [/(\d|\u035B)(?=(\d{3}|\d{3}\u035Br|\d\u035B\d{2}|\d{2}\u035B\d|\u035B\d{3})+(?!(\d|\u035B\d|\d\u035B)))/g, "$1 "]
+      [/(\d|\u035B)(?=(\d{3}|\d{3}\u035B|\d\u035B\d{2}|\d{2}\u035B\d|\u035B\d{3}|\d\u035B\d\u035B\d|\u035B\d\u035Br\d\u035B\d|\d\u035B\d\u035B\d\u035B)+(?!(\d|\u035B\d|\d\u035B)))/g, "$1 "]
 
 
     ],
@@ -117,7 +117,7 @@ for (let i=0, max=all.length; i < max; i++)
 	element =  all[i];
 	if (shouldSkip(element)){continue;}
   // setImprovedTypografy(element);
-console.log("Teď běží " + all[i].tagName)
+// console.log("Teď běží " + all[i].tagName)
 	main(all[i]);
 
 }
@@ -180,7 +180,7 @@ function getSiblings(element)
 
   if (getElementWithText(node) === null) {console.log("Poslaný element " + node.tagName + " je null");return;}
 
-  if (!node.hasChildNodes || node.childNodes[0].nextSibling === null ){console.log("Soused elementu " + node.tagName + " je null");setImprovedTypografy(node); return;}
+  if (!node.hasChildNodes || node.childNodes[0].nextSibling === null ){setImprovedTypografy(node); return;}
 
   const elements = getElementWithText(node);
   let text = "";
@@ -225,8 +225,8 @@ function getSiblings(element)
 
     for (let i=0, maxi=sibs.length; i < maxi; i++)
     {
-      console.log(i);
-      if (sibs[i].nodeValue !== null && sibs[i].nodeType === 3){console.log(sibs[i].textContent);sibsWithText.push(sibs[i]);}
+
+      if (sibs[i].nodeValue !== null && sibs[i].nodeType === 3){sibsWithText.push(sibs[i]);}
       if (sibs[i].hasChildNodes && inLineElements.includes(sibs[i].tagName) && sibs[i].nodeType === 1)
       { 
 
