@@ -148,17 +148,6 @@ function main(element)
 
 
 }
- // var neco = document.getElementById("2");
-
- // console.log(neco.nodeValue);
-
-//  if (neco.hasChildNodes) {console.log("Má")}
-//  var neco2 = neco.nextSibling;
-// console.log(neco.childNodes[4].textContent.trim());
-
- // console.log(neco4.nodeType);
- // if (neco.hasChildNodes) { console.log("má dítě");}
-// getAllSiblings(neco);
 
 function getSiblings(element)
 {
@@ -249,7 +238,6 @@ function getSiblings(element)
 function setImprovedTypografy(element)
 {
 	element.textContent = improveTypography(element.textContent);
-	// element.textContent = "ahoj";
 	return;
 }
 
