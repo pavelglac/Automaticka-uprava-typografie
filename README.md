@@ -17,6 +17,7 @@ Metodu runAutoCorrector lze volat s parametrem, kterým se vypne opravování n�
 > elipse: true
 
 Spuštění s parametrem může vypadat takto:
+
 `<script src="autocorrector.js" defer onload="runAutoCorrector({space: false,elipse: false})"/>`
 
 ## Upozornění
