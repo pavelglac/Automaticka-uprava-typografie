@@ -1,7 +1,18 @@
-const all = document.getElementsByTagName("*");
 const inLineElements = ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "CODE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "BR", "IMG", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"];
 const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "BODY", "HEAD", "META", "HTML", ""];
 const usellesChar = "\u035B";
+
+let options = {
+  
+  quote: false,
+  units: false,
+  number: true,
+  space: false,
+  date: false,
+  elipse: true
+
+};
+
 const Rules = {
 
     // rules for czech quotes
@@ -112,13 +123,31 @@ const Rules = {
 
 };
 
-for (let i=0, max=all.length; i < max; i++)
+function runAutoCorrector(settings)
 {
-	element =  all[i];
-	if (shouldSkip(element)){continue;}
-  // setImprovedTypografy(element);
-// console.log("Teď běží " + all[i].tagName)
-	main(all[i]);
+
+  options = Object.assign(options, settings);
+  if (document.getElementsByTagName("typography-Autocirrector").length === 0)
+  {
+    const all = document.getElementsByTagName("*");
+    elementIteration(all);
+  }
+  else
+  {
+   const all = document.getElementsByTagName("typography-Autocirrecto");
+   elementIteration(all);
+  }
+
+}
+
+function elementIteration(all) {
+
+  for (let i=0, max=all.length; i < max; i++)
+  {
+    element =  all[i];
+    if (shouldSkip(element)){continue;}
+    textJoining(all[i]);
+  }
 
 }
 
@@ -135,17 +164,6 @@ function shouldSkip(node)
   }
 
   return true;
-
-}
-
-function main(element)
-{
-
-  let sibs = getSiblings(element);
-
-
-  textJoining(element);
-
 
 }
 
@@ -167,11 +185,9 @@ function getSiblings(element)
  function textJoining(node)
  {
 
-  if (getElementWithText(node) === null) {console.log("Poslaný element " + node.tagName + " je null");return;}
-
   if (!node.hasChildNodes || node.childNodes[0].nextSibling === null ){setImprovedTypografy(node); return;}
 
-  const elements = getElementWithText(node);
+  const elements = getText(node);
   let text = "";
 
   for (let i = 0; i < elements.length; i++) {
@@ -183,7 +199,6 @@ function getSiblings(element)
 
   text = improveTypography(text);
   const textField = text.split(usellesChar, elements.length);
-  console.log(text);
 
   for (let i = 0; i < textField.length; i++) {
 
@@ -196,15 +211,6 @@ function getSiblings(element)
 
  }
 
- function getElementWithText(node)
- {
-
-  if (node.nodeType === 3){const element = node; return element}
-  if (node.nodeType === 1){const element = getText(node); return element}
-
-  return null;
-
- }
 
  function getText(node)
  {
@@ -216,7 +222,7 @@ function getSiblings(element)
     {
 
       if (sibs[i].nodeValue !== null && sibs[i].nodeType === 3){sibsWithText.push(sibs[i]);}
-      if (sibs[i].hasChildNodes && inLineElements.includes(sibs[i].tagName) && sibs[i].nodeType === 1)
+      if (sibs[i].hasChildNodes && inLineElements.includes(sibs[i].tagName) && sibs[i].tagName !== "BR" && sibs[i].nodeType === 1)
       { 
 
         const sibsOfTheChild = getText(sibs[i]);
@@ -244,48 +250,60 @@ function setImprovedTypografy(element)
 function improveTypography(string){
 
 
- //  for(let rule of Rules.quote)
- //  {
+  if (options.quote === true){
+    for(let rule of Rules.quote)
+    {
 
-	// string = string.replace(rule[0], rule[1]);
+      string = string.replace(rule[0], rule[1]);
 
- //  }
-
- //  for(let rule of Rules.units)
- //  {
-
- //    string = string.replace(rule[0], rule[1]);
-
- //  }
-
-  for(let rule of Rules.number)
-  {
-
-    string = string.replace(rule[0], rule[1]);
-
+    } 
   }
 
-  // for(let rule of Rules.space)
-  // {
+  if (options.units === true){
+    for(let rule of Rules.units)
+    {
 
-  //   string = string.replace(rule[0], rule[1]);
+      string = string.replace(rule[0], rule[1]);
 
-  // }
-
-  // for(let rule of Rules.date)
-  // {
-
-  //   string = string.replace(rule[0], rule[1]);
-
-  // }
-
-
-  for(let rule of Rules.elipse)
-  {
-
-    string = string.replace(rule[0], rule[1]);
-
+    } 
   }
+
+  if (options.number === true){
+    for(let rule of Rules.number)
+    {
+
+      string = string.replace(rule[0], rule[1]);
+
+    } 
+  }      
+
+  if (options.space === true){
+    for(let rule of Rules.space)
+    {
+
+      string = string.replace(rule[0], rule[1]);
+
+    } 
+  }  
+
+  if (options.date === true){
+    for(let rule of Rules.date)
+    {
+
+      string = string.replace(rule[0], rule[1]);
+
+    } 
+  }
+
+  if (options.elipse === true){
+    for(let rule of Rules.elipse)
+    {
+
+      string = string.replace(rule[0], rule[1]);
+
+    } 
+  }      
+
 
   return string;
 
