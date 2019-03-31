@@ -127,14 +127,14 @@ function runAutoCorrector(settings)
 {
 
   options = Object.assign(options, settings);
-  if (document.getElementsByTagName("typography-Autocirrector").length === 0)
+  if (document.getElementsByTagName("typography-autocorrector").length === 0)
   {
     const all = document.getElementsByTagName("*");
     elementIteration(all);
   }
   else
   {
-   const all = document.getElementsByTagName("typography-Autocirrecto");
+   const all = document.getElementsByTagName("typography-autocorrector");
    elementIteration(all);
   }
 
