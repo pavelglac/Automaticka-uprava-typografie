@@ -4,11 +4,11 @@ const usellesChar = "\u035B";
 
 let options = {
   
-  quote: false,
+  quote: true,
   units: false,
   number: true,
   space: false,
-  date: false,
+  date: true,
   elipse: true
 
 };
@@ -78,7 +78,7 @@ const Rules = {
 
     number: [
 
-      [/(\d|\u035B)(?=(\d{3}|\d{3}\u035B|\d\u035B\d{2}|\d{2}\u035B\d|\u035B\d{3}|\d\u035B\d\u035B\d|\u035B\d\u035Br\d\u035B\d|\d\u035B\d\u035B\d\u035B)+(?!(\d|\u035B\d|\d\u035B)))/g, "$1 "]
+      [/(\d|\u035B)(?=(\d{3}|\d{3}\u035B|\d\u035B\d{2}|\d{2}\u035B\d|\u035B\d{3}|\d\u035B\d\u035B\d|\u035B\d\u035Br\d\u035B\d|\d\u035B\d\u035B\d\u035B)+(?!(\d|\u035B\d|\d\u035B)))/g, "$1"+"\u202F"]
 
 
     ],
@@ -90,6 +90,8 @@ const Rules = {
       [/  /g, " "],
 
       [/ (a|i|o|u|s|z|k|v|A|I|O|U|S|Z|K|V) /g, " $1\u00a0"],
+
+      [/ (a|i|o|u|s|z|k|v|A|I|O|U|S|Z|K|V)\u035B/g, " $1\u00a0\u035B"],
 
       [/(\d+)( )(\w|%)/g, "$1"+"\u00a0"+"$3"],
 
@@ -105,7 +107,11 @@ const Rules = {
 
     date: [
 
-      [/(\d{1,2}\.)(\d{1,2}\.)(\d{4})/g, "$1"+"\u00a0"+"$2"+" "+"$3"]
+      [/(\d{1,2}\.)(\d{1,2}\.)(\d{4})/g, "$1"+"\u00a0"+"$2"+" "+"$3"],
+      [/(\d{1,2}\.)(\d{1,2}\.)(\d)\u202F(\d{3})/g, "$1"+"\u00a0"+"$2"+" "+"$3"+"$4"],
+      [/(\d{1,2}\.)(\d{1,2}\.)(\d)\u202F(\d{2}\u035B\d)/g, "$1"+"\u00a0"+"$2"+" "+"$3$4"],
+      [/(\d{1,2}\.)(\d{1,2}\.)(\d)\u202F\d\u035B(\d{2})/g, "$1"+"\u00a0"+"$2"+" "+"$3$4"],
+      [/(\d{1,2}\.)(\d{1,2}\.)(\d)\u202F(\u035B\d{3})/g, "$1"+"\u00a0"+"$2"+" "+"$3$4"]
 
     ],
 
@@ -144,7 +150,7 @@ function elementIteration(all) {
 
   for (let i=0, max=all.length; i < max; i++)
   {
-    element =  all[i];
+    let element =  all[i];
     if (shouldSkip(element)){continue;}
     textJoining(all[i]);
   }
