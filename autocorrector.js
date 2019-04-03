@@ -1,4 +1,4 @@
-const inLineElements = ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "CODE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "BR", "IMG", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"];
+const inLineElements = ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "CODE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "BR", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"];
 const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "BODY", "HEAD", "META", "HTML", ""];
 const usellesChar = "\u035B";
 
@@ -113,11 +113,11 @@ const Rules = {
 
     date: [
 
-      [/(\d{1,2}\.)(\d{1,2}\.)(\d{4})/g, "$1"+"\u00a0"+"$2"+" "+"$3"],
-      [/(\d{1,2}\.)(\d{1,2}\.)(\d)\u202F(\d{3})/g, "$1"+"\u00a0"+"$2"+" "+"$3"+"$4"],
-      [/(\d{1,2}\.)(\d{1,2}\.)(\d)\u202F(\d{2}\u035B\d)/g, "$1"+"\u00a0"+"$2"+" "+"$3$4"],
-      [/(\d{1,2}\.)(\d{1,2}\.)(\d)\u202F\d\u035B(\d{2})/g, "$1"+"\u00a0"+"$2"+" "+"$3$4"],
-      [/(\d{1,2}\.)(\d{1,2}\.)(\d)\u202F(\u035B\d{3})/g, "$1"+"\u00a0"+"$2"+" "+"$3$4"]
+      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d{4})/g, "$1"+"\u00a0"+"$3"+" "+"$5"],
+      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F(\d{3})/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"],
+      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F(\d{2}\u035B\d)/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"],
+      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F\d\u035B(\d{2})/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"],
+      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F(\u035B\d{3})/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"]
 
     ],
 
