@@ -7,7 +7,7 @@ let options = {
   quote: true,
   units: false,
   number: true,
-  space: false,
+  space: true,
   date: true,
   elipse: true
 
@@ -95,9 +95,15 @@ const Rules = {
 
       [/(\d+)( )(\w|%)/g, "$1"+"\u00a0"+"$3"],
 
+      [/(\d+)(\u035B)(\w|%)/g, "$1"+"\u00a0\u035B"+"$3"],
+
       [/(\d+\.)( )(\w)/g, "$1"+"\u00a0"+"$3"],
 
+      [/(\d+\.)(\u035B)(\w)/g, "$1"+"\u00a0\u035B"+"$3"],
+
       [/([§|#])( )(\d)/g, "$1"+"\u00a0"+"$3"],
+
+      [/([§|#])(\u035B)(\d)/g, "$1"+"\u00a0\u035B"+"$3"],
 
       [/(tj|tzv|tzn)\. /g, "$1.\u00a0"]
 
