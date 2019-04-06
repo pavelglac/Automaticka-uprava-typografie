@@ -1,8 +1,10 @@
-const inLineElements = ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "CODE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "BR", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"];
-const ignoredElemenents = ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "BODY", "HEAD", "META", "HTML", ""];
-const usellesChar = "\u035B";
+const typo = {
 
-let options = {
+inLineElements : ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "CODE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "BR", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"],
+ignoredElemenents : ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "HEAD", "META", "HTML", ""],
+usellesChar : "\uE000",
+
+options : {
   
   quote: true,
   units: false,
@@ -11,9 +13,9 @@ let options = {
   date: true,
   elipse: true
 
-};
+},
 
-const Rules = {
+Rules : {
 
     // rules for czech quotes
 
@@ -78,7 +80,7 @@ const Rules = {
 
     number: [
 
-      [/(\d|\u035B)(?=(\d{3}|\d{3}\u035B|\d\u035B\d{2}|\d{2}\u035B\d|\u035B\d{3}|\d\u035B\d\u035B\d|\u035B\d\u035Br\d\u035B\d|\d\u035B\d\u035B\d\u035B)+(?!(\d|\u035B\d|\d\u035B)))/g, "$1"+"\u202F"]
+      [/(\d|\uE000)(?=(\d{3}|\d{3}\uE000|\d\uE000\d{2}|\d{2}\uE000\d|\uE000\d{3}|\d\uE000\d\uE000\d|\uE000\d\uE000r\d\uE000\d|\d\uE000\d\uE000\d\uE000)+(?!(\d|\uE000\d|\d\uE000)))/g, "$1"+"\u202F"]
 
 
     ],
@@ -91,15 +93,20 @@ const Rules = {
 
       [/ (a|i|o|u|s|z|k|v|A|I|O|U|S|Z|K|V) /g, " $1\u00a0"],
 
-      [/ (a|i|o|u|s|z|k|v|A|I|O|U|S|Z|K|V)\u035B/g, " $1\u00a0\u035B"],
+      [/ (a|i|o|u|s|z|k|v|A|I|O|U|S|Z|K|V)\uE000 /g, " $1\u00a0\uE000"],
+
+      [/ \uE000(a|i|o|u|s|z|k|v|A|I|O|U|S|Z|K|V)\uE000 /g, " \uE000$1\u00a0\uE000"],
+
+      [/ \uE000(a|i|o|u|s|z|k|v|A|I|O|U|S|Z|K|V) /g, " \uE000$1\u00a0"],
+
 
       [/(\d+)( )(%)/g, "$1"+"\u00a0"+"$3"],
 
-      [/(\d+)(\u035B)(%)/g, "$1"+"\u00a0\u035B"+"$3"],
+      [/(\d+)(\uE000)(%)/g, "$1"+"\u00a0\uE000"+"$3"],
 
       [/([§|#])( )(\d)/g, "$1"+"\u00a0"+"$3"],
 
-      [/([§|#])(\u035B)(\d)/g, "$1"+"\u00a0\u035B"+"$3"],
+      [/([§|#])(\uE000)(\d)/g, "$1"+"\u00a0\uE000"+"$3"],
 
       [/(tj|tzv|tzn)\. /g, "$1.\u00a0"]
 
@@ -110,10 +117,10 @@ const Rules = {
     date: [
 
       [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d{4})/g, "$1"+"\u00a0"+"$3"+" "+"$5"],
-      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F(\d{3})/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"],
-      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F(\d{2}\u035B\d)/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"],
-      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F\d\u035B(\d{2})/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"],
-      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F(\u035B\d{3})/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"]
+      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F(\d{3})/g, "$1"+"\u00a0"+"$3"+" "+"$5"+"$6"],
+      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F(\d{2}\uE000\d)/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"],
+      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F\d\uE000(\d{2})/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"],
+      [/(\d{1,2}\.)(| )(\d{1,2}\.)(| )(\d)\u202F(\uE000\d{3})/g, "$1"+"\u00a0"+"$3"+" "+"$5$6"]
 
     ],
 
@@ -122,48 +129,48 @@ const Rules = {
     elipse: [
 
       [/\.{3}/g, "…"],
-      [/\.{2}\u035B\./g, "…\u035B"],
-      [/\.\u035B\.\./g, "\u035B…"],
-      [/\.\u035B\.\u035B\./g, "\u035B…\u035B"]
+      [/\.{2}\uE000\./g, "…\uE000"],
+      [/\.\uE000\.\./g, "\uE000…"],
+      [/\.\uE000\.\uE000\./g, "\uE000…\uE000"]
 
     ],
 
 
-};
+},
 
-function runAutoCorrector(settings)
+runAutoCorrector : function runAutoCorrector(settings)
 {
 
-  options = Object.assign(options, settings);
+  options = Object.assign(typo.options, settings);
   if (document.getElementsByTagName("typography-autocorrector").length === 0)
   {
     const all = document.getElementsByTagName("*");
-    elementIteration(all);
+    typo.elementIteration(all);
   }
   else
   {
    const all = document.getElementsByTagName("typography-autocorrector");
-   elementIteration(all);
+   typo.elementIteration(all);
   }
 
-}
+},
 
-function elementIteration(all) {
+elementIteration : function elementIteration(all) {
 
   for (let i=0, max=all.length; i < max; i++)
   {
     let element =  all[i];
-    if (shouldSkip(element)){continue;}
-    textJoining(all[i]);
+    if (typo.shouldSkip(element)){continue;}
+    typo.textJoining(all[i]);
   }
 
-}
+},
 
-function shouldSkip(node)
+shouldSkip : function shouldSkip(node)
 {
 
-  if (ignoredElemenents.includes(node.tagName) || node.textContent === "" || inLineElements.includes(node.tagName)) {return true;}
-  let sibs = getSiblings(node.childNodes[0]);
+  if (typo.ignoredElemenents.includes(node.tagName) || node.textContent === "" || typo.inLineElements.includes(node.tagName)) {return true;}
+  let sibs = typo.getSiblings(node.childNodes[0]);
 
   for (let i=0, max=sibs.length;   i < max; i++)
   {
@@ -173,9 +180,9 @@ function shouldSkip(node)
 
   return true;
 
-}
+},
 
-function getSiblings(element)
+getSiblings : function getSiblings(element)
 {
 
   let sibs = [];
@@ -189,24 +196,25 @@ function getSiblings(element)
   } 
   return sibs;
 
-}
- function textJoining(node)
+},
+
+textJoining : function textJoining(node)
  {
 
-  if (!node.hasChildNodes || node.childNodes[0].nextSibling === null ){setImprovedTypografy(node); return;}
+  if (!node.hasChildNodes || node.childNodes[0].nextSibling === null ){typo.setImprovedTypografy(node); return;}
 
-  const elements = getText(node);
+  const elements = typo.getText(node);
   let text = "";
 
   for (let i = 0; i < elements.length; i++) {
 
     text = text.concat(elements[i].textContent);
-    text = text.concat(usellesChar);
+    text = text.concat(typo.usellesChar);
 
   }
 
-  text = improveTypography(text);
-  const textField = text.split(usellesChar, elements.length);
+  text = typo.improveTypography(text);
+  const textField = text.split(typo.usellesChar, elements.length);
 
   for (let i = 0; i < textField.length; i++) {
 
@@ -217,23 +225,23 @@ function getSiblings(element)
 
   return;
 
- }
+ },
 
 
- function getText(node)
+getText : function getText(node)
  {
 
-    const sibs = getSiblings(node.childNodes[0]);
+    const sibs = typo.getSiblings(node.childNodes[0]);
     let sibsWithText = [];
 
     for (let i=0, maxi=sibs.length; i < maxi; i++)
     {
 
       if (sibs[i].nodeValue !== null && sibs[i].nodeType === 3){sibsWithText.push(sibs[i]);}
-      if (sibs[i].hasChildNodes && inLineElements.includes(sibs[i].tagName) && sibs[i].tagName !== "BR" && sibs[i].nodeType === 1)
+      if (sibs[i].hasChildNodes && typo.inLineElements.includes(sibs[i].tagName) && sibs[i].tagName !== "BR" && sibs[i].nodeType === 1)
       { 
 
-        const sibsOfTheChild = getText(sibs[i]);
+        const sibsOfTheChild = typo.getText(sibs[i]);
         for (let x=0, max=sibsOfTheChild.length; x < max; x++)
         {
           sibsWithText.push(sibsOfTheChild[x]);
@@ -246,20 +254,21 @@ function getSiblings(element)
 
     return sibsWithText;
  
- }
+ },
 
 
-function setImprovedTypografy(element)
+setImprovedTypografy : function setImprovedTypografy(element)
 {
-	element.textContent = improveTypography(element.textContent);
+	element.textContent = typo.improveTypography(element.textContent);
 	return;
-}
-
-function improveTypography(string){
+},
 
 
-  if (options.quote === true){
-    for(let rule of Rules.quote)
+improveTypography : function improveTypography(string){
+
+
+  if (typo.options.quote === true){
+    for(let rule of typo.Rules.quote)
     {
 
       string = string.replace(rule[0], rule[1]);
@@ -267,8 +276,8 @@ function improveTypography(string){
     } 
   }
 
-  if (options.units === true){
-    for(let rule of Rules.units)
+  if (typo.options.units === true){
+    for(let rule of typo.Rules.units)
     {
 
       string = string.replace(rule[0], rule[1]);
@@ -276,8 +285,8 @@ function improveTypography(string){
     } 
   }
 
-  if (options.number === true){
-    for(let rule of Rules.number)
+  if (typo.options.number === true){
+    for(let rule of typo.Rules.number)
     {
 
       string = string.replace(rule[0], rule[1]);
@@ -285,8 +294,8 @@ function improveTypography(string){
     } 
   }      
 
-  if (options.space === true){
-    for(let rule of Rules.space)
+  if (typo.options.space === true){
+    for(let rule of typo.Rules.space)
     {
 
       string = string.replace(rule[0], rule[1]);
@@ -294,8 +303,8 @@ function improveTypography(string){
     } 
   }  
 
-  if (options.date === true){
-    for(let rule of Rules.date)
+  if (typo.options.date === true){
+    for(let rule of typo.Rules.date)
     {
 
       string = string.replace(rule[0], rule[1]);
@@ -303,8 +312,8 @@ function improveTypography(string){
     } 
   }
 
-  if (options.elipse === true){
-    for(let rule of Rules.elipse)
+  if (typo.options.elipse === true){
+    for(let rule of typo.Rules.elipse)
     {
 
       string = string.replace(rule[0], rule[1]);
@@ -314,5 +323,7 @@ function improveTypography(string){
 
 
   return string;
+
+}
 
 }
