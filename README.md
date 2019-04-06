@@ -5,7 +5,7 @@ Jednoduchá cesta, jak zlepšit typografii na Vašem webu bez námahy. Pokud je 
 ## Spuštění
 Script je nutné spouště až po sestavení celého DOMu, jelikož je poté procházen. Pokud chcete procházet pouze některé elementy, tak stačí je dát do třídy „typography-autocorrector“. Script poté bude brát pouze elementy v této třídě.
 
-`<script src="autocorrector.js" defer onload="runAutoCorrector()"></script>`
+`<script src="autocorrector.js" defer onload="typo.runAutoCorrector()"></script>`
 
 Metodu runAutoCorrector lze volat s parametrem, kterým se vypne opravování některých jevů. Názvy jednotlivých procedur je níže:
 
