@@ -231,8 +231,9 @@ textJoining : function textJoining(node)
 getText : function getText(node)
  {
 
-    const sibs = typo.getSiblings(node.childNodes[0]);
     let sibsWithText = [];
+    if (node.text === "") {return sibsWithText}
+    const sibs = typo.getSiblings(node.childNodes[0]);
 
     for (let i=0, maxi=sibs.length; i < maxi; i++)
     {
