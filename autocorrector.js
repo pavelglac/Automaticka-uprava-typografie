@@ -142,15 +142,22 @@ runAutoCorrector : function runAutoCorrector(settings)
 {
 
   options = Object.assign(typo.options, settings);
-  if (document.getElementsByTagName("typography-autocorrector").length === 0)
+  if (document.getElementsByClassName("typography-autocorrector").length > 0)
   {
-    const all = document.getElementsByTagName("*");
-    typo.elementIteration(all);
+    const all = document.getElementsByClassName("typography-autocorrector");
+
+    for (let i=0, max=all.length; i < max; i++)
+    {
+      typo.elementIteration(typo.getDescendants(all[i]));
+    }
+
+
   }
   else
   {
-   const all = document.getElementsByTagName("typography-autocorrector");
-   typo.elementIteration(all);
+   
+    const all = document.getElementsByTagName("*");
+    typo.elementIteration(all);
   }
 
 },
@@ -179,6 +186,14 @@ shouldSkip : function shouldSkip(node)
   }
 
   return true;
+
+},
+
+getDescendants : function getDescendants(node)
+{
+
+  const descendants = node.getElementsByTagName("*");
+  return descendants;
 
 },
 
