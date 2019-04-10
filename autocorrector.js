@@ -1,7 +1,7 @@
 const typo = {
 
-inLineElements : ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "CODE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "BR", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"],
-ignoredElemenents : ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "HEAD", "META", "HTML", ""],
+inLineElements : ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "CODE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"],
+ignoredElemenents : ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "HEAD", "META", "HTML", "BR", "IMG", ""],
 usellesChar : "\uE000",
 
 options : {
@@ -21,11 +21,17 @@ Rules : {
 
     quote: [
 
-      [/(“|"|“)(\w)/g, "„$2"],
+      [/(“|")(\w)/g, "„$2"],
+
+      [/(“|")\uE000(\w)/g, "„\uE000$2"],
 
       [/(”|")( |,|\n*|$)/g, "“$2"],
 
+      [/(”|")\uE000( |,|\n*|$)/g, "“\uE000$2"],
+
       [/(!|\?|\.)(”|")/g, "$1“"],
+
+      [/(!|\?|\.)\uE000(”|")/g, "$1\uE000“"],
 
       [/(\w)(')(\w)/g, "$1’$3"]
 
@@ -138,17 +144,28 @@ Rules : {
 
 },
 
+/**
+ * init function of whole script
+ * 
+ * @param  {object} settings [set parameters of object options]
+ * @return 
+ */
 runAutoCorrector : function runAutoCorrector(settings)
 {
 
   options = Object.assign(typo.options, settings);
   if (document.getElementsByClassName("typography-autocorrector").length > 0)
   {
-    const all = document.getElementsByClassName("typography-autocorrector");
-
-    for (let i=0, max=all.length; i < max; i++)
+    const elementsWithClass = document.getElementsByClassName("typography-autocorrector");
+    
+    /**
+     * get all nodes of node with class typography-autocorrector
+     * 
+     * @type {Number} max [number of elements with class]
+     */
+    for (let i=0, max=elementsWithClass.length; i < max; i++)
     {
-      typo.elementIteration(typo.getDescendants(all[i]));
+      typo.elementIteration(typo.getDescendants(elementsWithClass[i]));
     }
 
 
@@ -158,6 +175,7 @@ runAutoCorrector : function runAutoCorrector(settings)
    
     const all = document.getElementsByTagName("*");
     typo.elementIteration(all);
+
   }
 
 },
@@ -254,7 +272,7 @@ getText : function getText(node)
     {
 
       if (sibs[i].nodeValue !== null && sibs[i].nodeType === 3){sibsWithText.push(sibs[i]);}
-      if (sibs[i].hasChildNodes && typo.inLineElements.includes(sibs[i].tagName) && sibs[i].tagName !== "BR" && sibs[i].nodeType === 1)
+      if (sibs[i].hasChildNodes && sibs[i].textContent !== "" && typo.inLineElements.includes(sibs[i].tagName) && sibs[i].nodeType === 1)
       { 
 
         const sibsOfTheChild = typo.getText(sibs[i]);
