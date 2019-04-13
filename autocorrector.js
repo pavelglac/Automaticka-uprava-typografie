@@ -7,7 +7,7 @@ usellesChar : "\uE000",
 options : {
   
   quote: true,
-  units: false,
+  units: true,
   number: true,
   space: true,
   date: true,
@@ -86,6 +86,12 @@ Rules : {
 
     number: [
 
+      [/(\d)( |\u00a0)(\d)/g, "$1$3"],
+
+      [/(\d)\uE000( |\u00a0)(\d)/g, "$1\uE000$3"],
+
+      [/(\d)( |\u00a0)\uE000(\d)/g, "$1\uE000$3"],
+
       [/(\d|\uE000)(?=(\d{3}|\d{3}\uE000|\d\uE000\d{2}|\d{2}\uE000\d|\uE000\d{3}|\d\uE000\d\uE000\d|\uE000\d\uE000r\d\uE000\d|\d\uE000\d\uE000\d\uE000)+(?!(\d|\uE000\d|\d\uE000)))/g, "$1"+"\u202F"]
 
 
@@ -150,43 +156,72 @@ Rules : {
  * @param  {object} settings [set parameters of object options]
  * @return 
  */
-runAutoCorrector : function runAutoCorrector(settings)
+runAutoCorrector : function runAutoCorrector(settings, node)
 {
 
   options = Object.assign(typo.options, settings);
+  if (node !== undefined)
+  {
+
+    console.log(node.length);
+    typo.elementsWithClass(node);
+    return;
+
+  }
   if (document.getElementsByClassName("typography-autocorrector").length > 0)
   {
+
     const elementsWithClass = document.getElementsByClassName("typography-autocorrector");
+
+    typo.elementsWithClass(elementsWithClass);
+    return;
+
+  }
+
+  /**
+   *   If there is none node in the parameter
+   *                   or
+   *   no class with name typography-autocorrector
+   */
+  const all = document.getElementsByTagName("*");
+  typo.elementIteration(all);
+
+
+},
+
+elementsWithClass : function elementsWithClass(nodes)
+ {
     
     /**
      * get all nodes of node with class typography-autocorrector
      * 
      * @type {Number} max [number of elements with class]
      */
-    for (let i=0, max=elementsWithClass.length; i < max; i++)
+    for (let i=0, max=nodes.length; i < max; i++)
     {
-      typo.elementIteration(typo.getDescendants(elementsWithClass[i]));
+
+      const descendants = typo.getDescendants(nodes[i]);
+      typo.elementIteration(nodes[i]);
+      if (descendants > 0) {typo.elementIteration(descendants);}
+
     }
 
 
-  }
-  else
-  {
-   
-    const all = document.getElementsByTagName("*");
-    typo.elementIteration(all);
-
-  }
-
 },
 
-elementIteration : function elementIteration(all) {
-
-  for (let i=0, max=all.length; i < max; i++)
+elementIteration : function elementIteration(all)
+{
+  if (all.length > 0)
   {
-    let element =  all[i];
-    if (typo.shouldSkip(element)){continue;}
-    typo.textJoining(all[i]);
+    for (let i=0, max=all.length; i < max; i++)
+    {
+      const element =  all[i];
+      if (typo.shouldSkip(element)){continue;}
+      typo.textJoining(element);
+    }
+  }else{
+    if (typo.shouldSkip(all)){return;}
+    typo.textJoining(all);
   }
 
 },
@@ -195,15 +230,8 @@ shouldSkip : function shouldSkip(node)
 {
 
   if (typo.ignoredElemenents.includes(node.tagName) || node.textContent === "" || typo.inLineElements.includes(node.tagName)) {return true;}
-  let sibs = typo.getSiblings(node.childNodes[0]);
 
-  for (let i=0, max=sibs.length;   i < max; i++)
-  {
-
-    if (sibs[i].nodeType === 3 && sibs[i].nodeValue !== null && sibs[i].textContent.trim() !== "") {return false;}
-  }
-
-  return true;
+  return false;
 
 },
 
@@ -234,8 +262,6 @@ getSiblings : function getSiblings(element)
 textJoining : function textJoining(node)
  {
 
-  if (!node.hasChildNodes || node.childNodes[0].nextSibling === null ){typo.setImprovedTypografy(node); return;}
-
   const elements = typo.getText(node);
   let text = "";
 
@@ -265,7 +291,7 @@ getText : function getText(node)
  {
 
     let sibsWithText = [];
-    if (node.text === "") {return sibsWithText}
+    if (node.textContent === "") {return sibsWithText}
     const sibs = typo.getSiblings(node.childNodes[0]);
 
     for (let i=0, maxi=sibs.length; i < maxi; i++)
@@ -289,14 +315,6 @@ getText : function getText(node)
     return sibsWithText;
  
  },
-
-
-setImprovedTypografy : function setImprovedTypografy(element)
-{
-	element.textContent = typo.improveTypography(element.textContent);
-	return;
-},
-
 
 improveTypography : function improveTypography(string){
 
