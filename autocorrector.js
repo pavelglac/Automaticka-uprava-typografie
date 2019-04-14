@@ -153,27 +153,27 @@ Rules : {
 /**
  * init function of whole script
  * 
- * @param  {object} settings [set parameters of object options]
+ * @param  {object} settings [set parameters of the object options]
+ * @param  {HTML collection} node [collection for iteration]
  * @return 
  */
 runAutoCorrector : function runAutoCorrector(settings, node)
 {
 
   options = Object.assign(typo.options, settings);
+  const elementsWithClass = document.getElementsByClassName("typography-autocorrector");
+
   if (node !== undefined)
   {
 
-    console.log(node.length);
-    typo.elementsWithClass(node);
+    typo.elementsDescendants(node);
     return;
 
   }
-  if (document.getElementsByClassName("typography-autocorrector").length > 0)
+  if (elementsWithClass.length > 0)
   {
 
-    const elementsWithClass = document.getElementsByClassName("typography-autocorrector");
-
-    typo.elementsWithClass(elementsWithClass);
+    typo.elementsDescendants(elementsWithClass);
     return;
 
   }
@@ -181,7 +181,7 @@ runAutoCorrector : function runAutoCorrector(settings, node)
   /**
    *   If there is none node in the parameter
    *                   or
-   *   no class with name typography-autocorrector
+   *   no class with the name typography-autocorrector
    */
   const all = document.getElementsByTagName("*");
   typo.elementIteration(all);
@@ -189,7 +189,7 @@ runAutoCorrector : function runAutoCorrector(settings, node)
 
 },
 
-elementsWithClass : function elementsWithClass(nodes)
+elementsDescendants : function elementsDescendantss(nodes)
  {
     
     /**
@@ -200,7 +200,7 @@ elementsWithClass : function elementsWithClass(nodes)
     for (let i=0, max=nodes.length; i < max; i++)
     {
 
-      const descendants = typo.getDescendants(nodes[i]);
+      const descendants = nodes[i].getElementsByTagName("*");
       typo.elementIteration(nodes[i]);
       if (descendants > 0) {typo.elementIteration(descendants);}
 
@@ -232,14 +232,6 @@ shouldSkip : function shouldSkip(node)
   if (typo.ignoredElemenents.includes(node.tagName) || node.textContent === "" || typo.inLineElements.includes(node.tagName)) {return true;}
 
   return false;
-
-},
-
-getDescendants : function getDescendants(node)
-{
-
-  const descendants = node.getElementsByTagName("*");
-  return descendants;
 
 },
 
