@@ -2,12 +2,12 @@ const typo = {
 
 inLineElements : ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "CODE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"],
 ignoredElemenents : ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "HEAD", "META", "HTML", "BR", "IMG", ""],
-usellesChar : "\uE000",
+uselessChar : "\uE000",
 
 options : {
   
   quote: true,
-  units: false,
+  units: true,
   number: true,
   space: true,
   date: true,
@@ -78,8 +78,6 @@ Rules : {
 
       [/(\d+)(| )(%) /g, "$1"+"\u00a0"+"$3 "],
 
-      [/(|m|c|d|k)m(\d) /g, "$1m<sup>$2</sup> "]
-
     ],
 
     // rule for number formatting
@@ -92,6 +90,7 @@ Rules : {
 
       [/(\d)( |\u00a0)\uE000(\d)/g, "$1\uE000$3"],
 
+      //all position how number can be decomposed into different elements
       [/(\d|\uE000)(?=(\d{3}|\d{3}\uE000|\d\uE000\d{2}|\d{2}\uE000\d|\uE000\d{3}|\d\uE000\d\uE000\d|\uE000\d\uE000r\d\uE000\d|\d\uE000\d\uE000\d\uE000)+(?!(\d|\uE000\d|\d\uE000)))/g, "$1"+"\u202F"]
 
 
@@ -110,7 +109,6 @@ Rules : {
       [/ \uE000(a|i|o|u|s|z|k|v|A|I|O|U|S|Z|K|V)\uE000 /g, " \uE000$1\u00a0\uE000"],
 
       [/ \uE000(a|i|o|u|s|z|k|v|A|I|O|U|S|Z|K|V) /g, " \uE000$1\u00a0"],
-
 
       [/(\d+)( )(%)/g, "$1"+"\u00a0"+"$3"],
 
@@ -260,12 +258,12 @@ textJoining : function textJoining(node)
   for (let i = 0; i < elements.length; i++) {
 
     text = text.concat(elements[i].textContent);
-    text = text.concat(typo.usellesChar);
+    text = text.concat(typo.uselessChar);
 
   }
 
   text = typo.improveTypography(text);
-  const textField = text.split(typo.usellesChar, elements.length);
+  const textField = text.split(typo.uselessChar, elements.length);
 
   for (let i = 0; i < textField.length; i++) {
 
