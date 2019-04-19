@@ -44,39 +44,73 @@ Rules : {
 
     units: [
 
-      [/(\d+)(| )(|m)s /g, "$1"+"\u00a0"+"$3s "],
+      [/(\d+)(| )(|m)s/g, "$1"+"\u00a0"+"$3s"],
 
-      [/(\d+)(| )(min|h|d) /g, "$1"+"\u00a0"+"$3 "],
+      [/(\d+)(| )\uE000(| )(|m)s/g, "$1"+"\u00a0\uE000"+"$4s"],
 
-      [/(\d+)(| )(|n|m|c|d|k)m /g, "$1"+"\u00a0"+"$3m "],
+      [/(\d+)(| )(min|h|d)/g, "$1"+"\u00a0"+"$3"],
 
-      [/(\d+)(| )(|m|h|d|c|b)l /g, "$1"+"\u00a0"+"$3l "],
+      [/(\d+)(| )\uE000(| )(min|h|d)/g, "$1"+"\u00a0\uE000"+"$4"],
 
-      [/(\d+)(| )(ccm|gal) /g, "$1"+"\u00a0"+"$3 "],
+      [/(\d+)(| )(|n|m|c|d|k)m/g, "$1"+"\u00a0"+"$3m"],
 
-      [/(\d+)(| )(|m|c|d|k)m(\d) /g, "$1"+"\u00a0"+"$3m$4 "],
+      [/(\d+)(| )\uE000(| )(|n|m|c|d|k)m/g, "$1"+"\u00a0\uE000"+"$3m"],
 
-      [/(\d+)(| )(ccm|gal) /g, "$1"+"\u00a0"+"$3 "],
+      [/(\d+)(| )(|m|h|d|c|b)l/g, "$1"+"\u00a0"+"$3l"],
 
-      [/(\d+)(| )(ha|a) /g, "$1"+"\u00a0"+"$3 "],
+      [/(\d+)(| )\uE000(| )(|m|h|d|c|b)l/g, "$1"+"\u00a0\uE000"+"$3l"],
 
-      [/(\d+)(| )(|k|M)J /g, "$1"+"\u00a0"+"$3J "],
+      [/(\d+)(| )(ccm|gal)/g, "$1"+"\u00a0"+"$3"],
 
-      [/(\d+)(| )(|k)cal /g, "$1"+"\u00a0"+"$3cal "],
+      [/(\d+)(| )\uE000(| )(ccm|gal)/g, "$1"+"\u00a0\uE000"+"$3"],
 
-      [/(\d+)(| )(|kWh|M)Wh /g, "$1"+"\u00a0"+"$3Wh "],
+      [/(\d+)(| )(|m|c|d|k)m(\d)/g, "$1"+"\u00a0"+"$3m$4"],
 
-      [/(\d+)(| )(|k)m\/(s|min|h) /g, "$1"+"\u00a0"+"$3m/$4 "],
+      [/(\d+)(| )\uE000(| )(|m|c|d|k)m(\d)/g, "$1"+"\u00a0\uE000"+"$3m$4"],
 
-      [/(\d+)(| )(K|°C|°F) /g, "$1"+"\u00a0"+"$3 "],
+      [/(\d+)(| )(ccm|gal)/g, "$1"+"\u00a0"+"$3"],
 
-      [/(\d+)(| )(|h|k|M)Pa /g, "$1"+"\u00a0"+"$3Pa "],
+      [/(\d+)(| )\uE000(| )(ccm|gal)/g, "$1"+"\u00a0\uE000"+"$4"],
 
-      [/(\d+)(| )(bar|atm) /g, "$1"+"\u00a0"+"$3 "],
+      [/(\d+)(| )(ha|a)/g, "$1"+"\u00a0"+"$3"],
 
-      [/(\d+)(| )(|k)W /g, "$1"+"\u00a0"+"$3 "],
+      [/(\d+)(| )\uE000(| )(ha|a)/g, "$1"+"\u00a0\uE000"+"$4"],
 
-      [/(\d+)(| )(%) /g, "$1"+"\u00a0"+"$3 "],
+      [/(\d+)(| )(|k|M)J/g, "$1"+"\u00a0"+"$3J"],
+
+      [/(\d+)(| )\uE000(| )(|k|M)J/g, "$1"+"\u00a0\uE000"+"$4J"],
+
+      [/(\d+)(| )(|k)cal/g, "$1"+"\u00a0"+"$3cal"],
+
+      [/(\d+)(| )\uE000(| )(|k)cal/g, "$1"+"\u00a0"+"$4cal"],
+
+      [/(\d+)(| )(|kWh|M)Wh/g, "$1"+"\u00a0"+"$3Wh"],
+
+      [/(\d+)(| )\uE000(| )(|kWh|M)Wh/g, "$1"+"\u00a0\uE000"+"$4Wh"],
+
+      [/(\d+)(| )(|k)m\/(s|min|h)/g, "$1"+"\u00a0"+"$3m/$4"],
+
+      [/(\d+)(| )\uE000(| )(|k)m\/(s|min|h)/g, "$1"+"\u00a0\uE000"+"$4m/$5"],
+
+      [/(\d+)(| )(K|°C|°F)/g, "$1"+"\u00a0"+"$3"],
+
+      [/(\d+)(| )\uE000(| )(K|°C|°F)/g, "$1"+"\u00a0\uE000"+"$4"],
+
+      [/(\d+)(| )(|h|k|M)Pa/g, "$1"+"\u00a0"+"$3Pa"],
+
+      [/(\d+)(| )\uE000(| )(|h|k|M)Pa/g, "$1"+"\u00a0\uE000"+"$4Pa"],
+
+      [/(\d+)(| )(bar|atm)/g, "$1"+"\u00a0"+"$3"],
+
+      [/(\d+)(| )\uE000(| )(bar|atm)/g, "$1"+"\u00a0\uE000"+"$4"],
+
+      [/(\d+)(| )(|k)W/g, "$1"+"\u00a0"+"$3"],
+
+      [/(\d+)(| )\uE000(| )(|k)W/g, "$1"+"\u00a0\uE000"+"$4"],
+
+      [/(\d+)(| )(%)/g, "$1"+"\u00a0"+"$3"],
+
+      [/(\d+)(| )\uE000(| )(%)/g, "$1"+"\u00a0\uE000"+"$3"],
 
     ],
 
@@ -195,11 +229,11 @@ elementsDescendants : function elementsDescendants(nodes)
      * 
      * @type {Number} max [number of elements with class]
      */
-    for (let i=0, max=nodes.length; i < max; i++)
+    for (let node of nodes)
     {
 
-      const descendants = nodes[i].getElementsByTagName("*");
-      typo.elementIteration(nodes[i]);
+      const descendants = node.getElementsByTagName("*");
+      typo.elementIteration(node);
       if (descendants > 0) {typo.elementIteration(descendants);}
 
     }
@@ -211,9 +245,8 @@ elementIteration : function elementIteration(all)
 {
   if (all.length > 0)
   {
-    for (let i=0, max=all.length; i < max; i++)
+    for (let element of all)
     {
-      const element =  all[i];
       if (typo.shouldSkip(element)){continue;}
       typo.textJoining(element);
     }
@@ -252,25 +285,23 @@ getSiblings : function getSiblings(element)
 textJoining : function textJoining(node)
  {
 
-  const elements = typo.getText(node);
+  const nodes = typo.getText(node);
   let text = "";
+  for (let node of nodes) {
 
-  for (let i = 0; i < elements.length; i++) {
-
-    text = text.concat(elements[i].textContent);
+    text = text.concat(node.textContent);
     text = text.concat(typo.uselessChar);
 
   }
 
   text = typo.improveTypography(text);
-  const textField = text.split(typo.uselessChar, elements.length);
+  const textField = text.split(typo.uselessChar, nodes.length);
+  for (let i = 0; i < textField.length; i++)
+  {
 
-  for (let i = 0; i < textField.length; i++) {
-
-    elements[i].textContent = textField[i];
+    nodes[i].textContent = textField[i];
 
   }
-
 
   return;
 
@@ -283,18 +314,17 @@ getText : function getText(node)
     let sibsWithText = [];
     if (node.textContent === "") {return sibsWithText}
     const sibs = typo.getSiblings(node.childNodes[0]);
-
-    for (let i=0, maxi=sibs.length; i < maxi; i++)
+    for (let sib of sibs)
     {
 
-      if (sibs[i].nodeValue !== null && sibs[i].nodeType === 3){sibsWithText.push(sibs[i]);}
-      if (sibs[i].hasChildNodes && sibs[i].textContent !== "" && typo.inLineElements.includes(sibs[i].tagName) && sibs[i].nodeType === 1)
+      if (sib.nodeValue !== null && sib.nodeType === 3){sibsWithText.push(sib);}
+      if (sib.hasChildNodes && sib.textContent !== "" && typo.inLineElements.includes(sib.tagName) && sib.nodeType === 1)
       { 
 
-        const sibsOfTheChild = typo.getText(sibs[i]);
-        for (let x=0, max=sibsOfTheChild.length; x < max; x++)
+        const sibsOfChild = typo.getText(sib);
+        for (let sibWithText of sibsOfChild)
         {
-          sibsWithText.push(sibsOfTheChild[x]);
+          sibsWithText.push(sibWithText);
         }
 
 
