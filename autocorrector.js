@@ -144,13 +144,9 @@ Rules : {
 
       [/ \uE000(a|i|o|u|s|z|k|v|A|I|O|U|S|Z|K|V) /g, " \uE000$1\u00a0"],
 
-      [/(\d+)( )(%)/g, "$1"+"\u00a0"+"$3"],
-
-      [/(\d+)(\uE000)(%)/g, "$1"+"\u00a0\uE000"+"$3"],
-
       [/([§|#])( )(\d)/g, "$1"+"\u00a0"+"$3"],
 
-      [/([§|#])(\uE000)(\d)/g, "$1"+"\u00a0\uE000"+"$3"],
+      [/([§|#])(| )\uE000(| )(\d)/g, "$1"+"\u00a0\uE000"+"$4"],
 
       [/(tj|tzv|tzn)\. /g, "$1.\u00a0"]
 
@@ -321,6 +317,9 @@ getText : function getText(node)
       if (sib.hasChildNodes && sib.textContent !== "" && typo.inLineElements.includes(sib.tagName) && sib.nodeType === 1)
       { 
 
+        /*
+          iteration of the DOM in depth
+         */
         const sibsOfChild = typo.getText(sib);
         for (let sibWithText of sibsOfChild)
         {
