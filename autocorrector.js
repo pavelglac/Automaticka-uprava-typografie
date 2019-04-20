@@ -335,60 +335,56 @@ getText : function getText(node)
  
  },
 
-improveTypography : function improveTypography(string){
+improveTypography : function improveTypography(string)
+{
 
-  switch(true)
+  if (typo.options.quote)
   {
-
-    case typo.options.quote:
       for(let rule of typo.Rules.quote)
       {
-
         string = string.replace(rule[0], rule[1]);
-
-      };
-
-    case typo.options.units:
-      for(let rule of typo.Rules.units)
-      {
-
-        string = string.replace(rule[0], rule[1]);
-
-      };
-
-    case typo.options.number:
-      for(let rule of typo.Rules.number)
-      {
-
-        string = string.replace(rule[0], rule[1]);
-
-      };
-
-    case typo.options.space:
-      for(let rule of typo.Rules.space)
-      {
-
-        string = string.replace(rule[0], rule[1]);
-
-      };
-
-     case typo.options.date:
-      for(let rule of typo.Rules.date)
-      {
-
-        string = string.replace(rule[0], rule[1]);
-
-      };
-
-     case typo.options.elipse:
-      for(let rule of typo.Rules.elipse)
-      {
-
-        string = string.replace(rule[0], rule[1]);
-
-      };    
-
+      } 
   }
+
+  if (typo.options.units)
+  {
+    for(let rule of typo.Rules.units)
+    {
+      string = string.replace(rule[0], rule[1]);
+    } 
+  }
+
+  if (typo.options.number)
+  {
+    for(let rule of typo.Rules.number)
+    {
+      string = string.replace(rule[0], rule[1]);
+    } 
+  } 
+
+  if (typo.options.space)
+  {
+    for(let rule of typo.Rules.space)
+    {
+      string = string.replace(rule[0], rule[1]);
+    } 
+  }
+
+  if (typo.options.date)
+  {
+    for(let rule of typo.Rules.date)
+    {
+      string = string.replace(rule[0], rule[1]);
+    } 
+  }
+
+  if (typo.options.elipse)
+  {
+    for(let rule of typo.Rules.elipse)
+    {
+      string = string.replace(rule[0], rule[1]);
+    } 
+  } 
   
   return string;
 
