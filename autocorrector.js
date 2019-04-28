@@ -189,7 +189,7 @@ Rules : {
 runAutoCorrector : function runAutoCorrector(settings, node)
 {
 
-while (typo.checkUselessChar()) {typo.setUselessChar();}
+  while (typo.checkUselessChar()) {typo.setUselessChar();}
 
   options = Object.assign(typo.options, settings);
   const elementsWithClass = document.getElementsByClassName("typography-autocorrector");
@@ -243,26 +243,20 @@ elementsDescendants : function elementsDescendants(nodes)
 setUselessChar : function setUselessChar()
 {
 
-    if (typo.uselessCharsCollection.length > 0)
+    for (let rule in typo.Rules)
     {
-
-      for (let rule in typo.Rules)
-      {
-        rule.replace(typo.uselessChar, typo.uselessCharsCollection[0])
-      }
-      typo.uselessChar = typo.uselessCharsCollection[0];
-      typo.uselessCharsCollection.shift();
-      return;
-
-    }else{
-      console.log("Prosím změňte proměnou uselessChar ve scriptu na znak, který se nevyskystuje na stránce.")}
-
+      rule.replace(typo.uselessChar, typo.uselessCharsCollection[0])
+    }
+    typo.uselessChar = typo.uselessCharsCollection[0];
+    typo.uselessCharsCollection.shift();
+    return;    
 
 },
 
 checkUselessChar : function checkUselessChar()
 {
 
+  if (typo.uselessCharsCollection.length === 0){console.error("Změňte proměnou uselessChar ve scriptu na znak, který se nevyskystuje na stránce.");return false;}
   const str = document.getElementsByTagName("BODY")[0].textContent;
   const patt = new RegExp(typo.uselessChar);
   const result = patt.test(str);
