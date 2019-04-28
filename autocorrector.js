@@ -1,8 +1,9 @@
 const typo = {
 
-inLineElements : ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "CODE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"],
+inLineElements : ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"],
 ignoredElemenents : ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "HEAD", "META", "HTML", "BR", "IMG", ""],
 uselessChar : "\uE000",
+uselessCharsCollection : ["\u001A", "\uE001", "\uE990"],
 
 options : {
   
@@ -11,7 +12,7 @@ options : {
   number: true,
   space: true,
   date: true,
-  elipse: true
+  ellipsis: true
 
 },
 
@@ -166,7 +167,7 @@ Rules : {
 
     // rule for ellipsis instead of 3 dots
 
-    elipse: [
+    ellipsis: [
 
       [/\.{3}/g, "…"],
       [/\.{2}\uE000\./g, "…\uE000"],
@@ -187,6 +188,8 @@ Rules : {
  */
 runAutoCorrector : function runAutoCorrector(settings, node)
 {
+
+if (typo.checkUselessChar()) {console.log("neco");typo.setUselessChar();}
 
   options = Object.assign(typo.options, settings);
   const elementsWithClass = document.getElementsByClassName("typography-autocorrector");
@@ -218,7 +221,7 @@ runAutoCorrector : function runAutoCorrector(settings, node)
 },
 
 elementsDescendants : function elementsDescendants(nodes)
- {
+{
     
     /**
      * get all nodes of node with class typography-autocorrector
@@ -233,6 +236,37 @@ elementsDescendants : function elementsDescendants(nodes)
       if (descendants > 0) {typo.elementIteration(descendants);}
 
     }
+
+
+},
+
+setUselessChar : function setUselessChar()
+{
+
+    if (typo.uselessCharsCollection.length > 0)
+    {
+
+      for (let rule in typo.Rules)
+      {
+        rule.replace(typo.uselessChar, typo.uselessCharsCollection[0])
+      }
+      typo.uselessChar = typo.uselessCharsCollection[0];
+      typo.uselessCharsCollection.shift();
+      return;
+
+    }else{
+      console.log("Prosím změňte proměnou uselessChar ve scriptu na znak, který se nevyskystuje na stránce.")}
+
+
+},
+
+checkUselessChar : function checkUselessChar()
+{
+
+  const str = document.getElementsByTagName("BODY")[0].textContent;
+  const patt = new RegExp(typo.uselessChar);
+  const result = patt.test(str);
+  return result;
 
 
 },
@@ -378,9 +412,9 @@ improveTypography : function improveTypography(string)
     } 
   }
 
-  if (typo.options.elipse)
+  if (typo.options.ellipsis)
   {
-    for(let rule of typo.Rules.elipse)
+    for(let rule of typo.Rules.ellipsis)
     {
       string = string.replace(rule[0], rule[1]);
     } 
