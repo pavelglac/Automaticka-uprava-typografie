@@ -189,7 +189,7 @@ Rules : {
 runAutoCorrector : function runAutoCorrector(settings, node)
 {
 
-if (typo.checkUselessChar()) {console.log("neco");typo.setUselessChar();}
+while (typo.checkUselessChar()) {typo.setUselessChar();}
 
   options = Object.assign(typo.options, settings);
   const elementsWithClass = document.getElementsByClassName("typography-autocorrector");
