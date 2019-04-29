@@ -16,7 +16,7 @@ Metodu runAutoCorrector lze volat s parametrem, kterým se vypne opravování n�
 | number|rozdělení čísla po třech desetinných míst|
 | space|pevná mezera za jednoslabičné předložky a spojky|
 | date|den a měsíc jsou spojeny nedělitelnou mezerou|
-| elipse|místo tří teček je použita výpustka|
+| ellipsis|místo tří teček je použita výpustka|
 
 Spuštění s parametrem může vypadat takto:
 
