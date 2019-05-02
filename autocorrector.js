@@ -12,7 +12,8 @@ options : {
   number: true,
   space: true,
   date: true,
-  ellipsis: true
+  ellipsis: true,
+  year: true
 
 },
 
@@ -176,7 +177,12 @@ Rules : {
 
     ],
 
+    year: [
 
+      [/( | \uE000|–|–\uE000|-|-\uE000|\u002F|\u002F\uE000)(1)\u202F(\d{3})(?!\u202F)/g, "$1$2$3"],
+      [/( | \uE000|–|–\uE000|-|-\uE000|\u002F|\u002F\uE000)(2)\u202F(100|0\d\d)(?!\u202F)/g, "$1$2$3"]
+
+    ],
 },
 
 /**
@@ -413,7 +419,14 @@ improveTypography : function improveTypography(string)
       string = string.replace(rule[0], rule[1]);
     } 
   } 
-  
+
+  if (typo.options.year)
+  {
+    for(let rule of typo.Rules.year)
+    {
+      string = string.replace(rule[0], rule[1]);
+    } 
+  }  
   return string;
 
 }
