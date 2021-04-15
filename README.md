@@ -2,6 +2,8 @@
 
 Jednoduchá cesta, jak zlepšit typografii na Vašem webu bez námahy. Pokud je jediná cesta, jak zlepšit jazykovou úpravu použití javascriptu na frontendu, tak tento script je přímo pro Vás.
 
+## [Web na vyzkoušení](https://www.pavelglac.com/typo/)
+
 ## Spuštění
 Script vložte na konec stránky před ukončovací tag body a zavolejte metodu `runAutoCorrector()` z objektu **typo** nebo vložte do hlavičky s atributem defer (viz. níže). Pokud chcete procházet pouze některé elementy, tak stačí je dát do třídy „typography-autocorrector“. Script poté bude brát pouze elementy v této třídě.
 
