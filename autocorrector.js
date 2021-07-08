@@ -1,7 +1,7 @@
 const typo = {
 
 inLineElements : ["B", "BIG", "I", "SMALL", "TT", "ABBR", "ACRONYM", "CITE", "DFN", "EM", "KDB", "STRONG", "SAMP", "VAR", "A", "BDO", "MAP", "OBJECT", "Q", "SPAN", "SUB", "SUP", "BUTTON", "INPUT", "LABEL", "SELECT", "TEXTAREA"],
-ignoredElemenents : ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "HEAD", "META", "HTML", "BR", "IMG", ""],
+ignoredElemenents : ["SCRIPT", "NOSCRIPT", "STYLE", "TITLE", "IFRAME", "HEAD", "META", "HTML", "BR", "IMG", "PRE", ""],
 uselessChar : "\uE000",
 uselessCharsCollection : ["\u001A", "\uE001", "\uE990"],
 
